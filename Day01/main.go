@@ -10,6 +10,11 @@ import (
 )
 
 func main() {
+	task1()
+	task2()
+}
+
+func task1() {
 	// Open the input file
 	file, err := os.Open("Input.txt")
 	if err != nil {
@@ -55,6 +60,10 @@ func main() {
 
 	// Print the total distance
 	fmt.Println("Total distance:", totalDistance)
+}
+
+func task2() {
+	// Task 2 implementation goes here
 }
 
 // Helper function to calculate the absolute value
