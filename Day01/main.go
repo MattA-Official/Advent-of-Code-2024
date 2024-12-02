@@ -63,7 +63,52 @@ func task1() {
 }
 
 func task2() {
-	// Task 2 implementation goes here
+	// Open the input file
+	file, err := os.Open("Input.txt")
+	if err != nil {
+		fmt.Println("Error opening file:", err)
+		return
+	}
+	defer file.Close()
+
+	// Read the input file
+	var leftList, rightList []int
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := scanner.Text()
+		parts := strings.Fields(line)
+		if len(parts) != 2 {
+			fmt.Println("Invalid input format")
+			return
+		}
+		leftNum, err := strconv.Atoi(parts[0])
+		if err != nil {
+			fmt.Println("Error parsing number:", err)
+			return
+		}
+		rightNum, err := strconv.Atoi(parts[1])
+		if err != nil {
+			fmt.Println("Error parsing number:", err)
+			return
+		}
+		leftList = append(leftList, leftNum)
+		rightList = append(rightList, rightNum)
+	}
+
+	// Create a map to count occurrences in the right list
+	rightCount := make(map[int]int)
+	for _, num := range rightList {
+		rightCount[num]++
+	}
+
+	// Calculate the similarity score
+	similarityScore := 0
+	for _, num := range leftList {
+		similarityScore += num * rightCount[num]
+	}
+
+	// Print the similarity score
+	fmt.Println("Similarity score:", similarityScore)
 }
 
 // Helper function to calculate the absolute value
