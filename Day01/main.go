@@ -10,24 +10,48 @@ import (
 )
 
 func main() {
-	task1()
-	task2()
-}
+	// Check if the input file is provided
+	if len(os.Args) < 2 {
+		fmt.Println("Missing input file")
+		return
+	}
 
-func task1() {
 	// Open the input file
-	file, err := os.Open("Input.txt")
+	fileName := os.Args[1]
+	file, err := os.Open(fileName)
 	if err != nil {
 		fmt.Println("Error opening file:", err)
 		return
 	}
 	defer file.Close()
 
-	// Read the input file
-	var leftList, rightList []int
+	// Read the lines from the file
+	lines, err := readLines(file)
+	if err != nil {
+		fmt.Println("Error reading lines:", err)
+		return
+	}
+
+	// Run both tasks
+	task1(lines)
+	task2(lines)
+}
+
+func readLines(file *os.File) ([]string, error) {
+	var lines []string
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
-		line := scanner.Text()
+		lines = append(lines, scanner.Text())
+	}
+	if err := scanner.Err(); err != nil {
+		return nil, err
+	}
+	return lines, nil
+}
+
+func task1(lines []string) {
+	var leftList, rightList []int
+	for _, line := range lines {
 		parts := strings.Fields(line)
 		if len(parts) != 2 {
 			fmt.Println("Invalid input format")
@@ -58,24 +82,12 @@ func task1() {
 		totalDistance += distance
 	}
 
-	// Print the total distance
 	fmt.Println("Total distance:", totalDistance)
 }
 
-func task2() {
-	// Open the input file
-	file, err := os.Open("Input.txt")
-	if err != nil {
-		fmt.Println("Error opening file:", err)
-		return
-	}
-	defer file.Close()
-
-	// Read the input file
+func task2(lines []string) {
 	var leftList, rightList []int
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		line := scanner.Text()
+	for _, line := range lines {
 		parts := strings.Fields(line)
 		if len(parts) != 2 {
 			fmt.Println("Invalid input format")
