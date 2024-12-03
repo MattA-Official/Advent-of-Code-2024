@@ -89,5 +89,25 @@ func isSafe(levels []int) bool {
 }
 
 func task2(lines []string) {
+	safeCount := 0
 
+	for _, line := range lines {
+		levels := parseLevels(line)
+		if isSafe(levels) || canBeMadeSafe(levels) {
+			safeCount++
+		}
+	}
+
+	fmt.Println("Number of safe reports with Problem Dampener:", safeCount)
+}
+
+func canBeMadeSafe(levels []int) bool {
+	for i := range levels {
+		modifiedLevels := append([]int{}, levels[:i]...)
+		modifiedLevels = append(modifiedLevels, levels[i+1:]...)
+		if isSafe(modifiedLevels) {
+			return true
+		}
+	}
+	return false
 }
