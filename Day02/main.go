@@ -4,6 +4,8 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
+	"strings"
 )
 
 func main() {
@@ -47,7 +49,43 @@ func readLines(file *os.File) ([]string, error) {
 }
 
 func task1(lines []string) {
+	safeCount := 0
 
+	for _, line := range lines {
+		levels := parseLevels(line)
+		if isSafe(levels) {
+			safeCount++
+		}
+	}
+
+	fmt.Println("Number of safe reports:", safeCount)
+}
+
+func parseLevels(line string) []int {
+	var levels []int
+	for _, s := range strings.Fields(line) {
+		level, _ := strconv.Atoi(s)
+		levels = append(levels, level)
+	}
+	return levels
+}
+
+func isSafe(levels []int) bool {
+	if len(levels) < 2 {
+		return false
+	}
+
+	increasing := levels[1] > levels[0]
+	for i := 1; i < len(levels); i++ {
+		diff := levels[i] - levels[i-1]
+		if diff == 0 || diff < -3 || diff > 3 {
+			return false
+		}
+		if (diff > 0) != increasing {
+			return false
+		}
+	}
+	return true
 }
 
 func task2(lines []string) {
